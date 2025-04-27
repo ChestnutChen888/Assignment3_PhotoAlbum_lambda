@@ -3,26 +3,53 @@ version: 0.2
 phases:
   install:
     runtime-versions:
-      python: 3.8
-      nodejs: 14
+      nodejs: 16
+      python: 3.9
     commands:
       - echo Installing dependencies...
+      - pip install --upgrade pip
+      - pip install --upgrade awscli
+  
+  pre_build:
+    commands:
+      # Install Node.js dependencies for index-photos
+      - echo Installing Node.js dependencies...
+      - cd index-photos
+      - npm install
+      - cd ..
+      
+      # Install Python dependencies for search-photos
+      - echo Installing Python dependencies...
+      - cd search-photos
+      # - pip install -r requirements.txt -t .
+      - cd ..
+  
   build:
     commands:
-      - echo Build started on `date`
+      # Package Node.js Lambda
+      - echo Packaging Node.js Lambda...
+      - cd index-photos
+      - zip -r ../index-photos.zip .
+      - cd ..
+      
+      # Package Python Lambda
+      - echo Packaging Python Lambda...
+      - cd search-photos
+      - zip -r ../search-photos.zip .
+      - cd ..
+  
+  post_build:
+    commands:
+      - echo Updating Lambda functions...
+      - aws lambda update-function-code --function-name index-photos --zip-file fileb://index-photos.zip
+      - aws lambda update-function-code --function-name search-photos --zip-file fileb://search-photos.zip
+      
+      # Verify S3 triggers are still in place
+      - echo Verifying Lambda triggers...
+      - aws lambda get-policy --function-name index-photos || echo "WARNING: May need to reconfigure S3 trigger for index-photos"
+
 artifacts:
   files:
-    - '**/*'
+    - index-photos.zip
+    - search-photos.zip
   discard-paths: yes
-  secondary-artifacts:
-    indexphotos:
-      base-directory: index-photos
-      files:
-        - index.js
-        - package.json
-        - appspec.yml
-    searchphotos:
-      base-directory: search-photos
-      files:
-        - lambda_function.py
-        - appspec.yml

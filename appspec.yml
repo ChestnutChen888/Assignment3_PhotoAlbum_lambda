@@ -1,4 +1,5 @@
 version: 0.0
+version: 0.0
 Resources:
   - indexPhotosFunction:
       Type: AWS::Lambda::Function
@@ -10,3 +11,11 @@ Resources:
       Properties:
         Name: search-photos
         Alias: live
+hooks:
+  BeforeAllowTraffic:
+    - location: scripts/update_lambda_index.sh
+      timeout: 300
+      name: BeforeAllowTrafficHookIndex
+    - location: scripts/update_lambda_search.sh
+      timeout: 300
+      name: BeforeAllowTrafficHookSearch

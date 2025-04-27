@@ -46,7 +46,7 @@ phases:
       
       # Verify S3 triggers are still in place
       - echo Verifying Lambda triggers...
-      - aws lambda get-policy --function-name index-photos || echo "WARNING: May need to reconfigure S3 trigger for index-photos"
+      #- aws lambda get-policy --function-name index-photos || echo "WARNING: May need to reconfigure S3 trigger for index-photos"
 
 artifacts:
   files:

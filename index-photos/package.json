@@ -1,0 +1,10 @@
+
+{
+  "name": "photo-indexer-opensearch",
+  "version": "1.0.0",
+  "main": "index.js",
+  "dependencies": {
+    "@opensearch-project/opensearch": "^2.0.0",
+    "aws-sdk": "^2.1000.0"
+  }
+}

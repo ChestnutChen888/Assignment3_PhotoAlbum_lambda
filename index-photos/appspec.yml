@@ -1,7 +1,0 @@
-version: 0.0
-Resources:
-  - indexPhotosFunction:
-      Type: AWS::Lambda::Function
-      Properties:
-        Name: index-photos
-        Alias: live

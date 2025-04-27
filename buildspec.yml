@@ -2,11 +2,25 @@ version: 0.2
 
 phases:
   install:
+    runtime-versions:
+      python: 3.11
+      nodejs: 18
     commands:
-      - echo Installing source files
+      - echo Installing dependencies for Python and Node.js...
+      - cd search-photos
+      - if [ -f requirements.txt ]; then pip install -r requirements.txt -t .; fi
+      - cd ..
+      - cd index-photos
+      - if [ -f package.json ]; then npm install; fi
+      - cd ..
+
   build:
     commands:
-      - echo Build completed
+      - echo Build completed successfully.
+
 artifacts:
   files:
-    - '**/*'
+    - appspec.yml
+    - scripts/**
+    - index-photos/**
+    - search-photos/**

@@ -41,6 +41,11 @@ phases:
   post_build:
     commands:
       - echo Updating Lambda functions...
+      - echo "Current directory: $(pwd)"
+      - echo "Directory contents: $(ls -la)"
+      - echo "Zip file details: $(ls -la index-photos.zip)"
+      - echo "AWS CLI version: $(aws --version)"
+      - echo "Identity: $(aws sts get-caller-identity)"
       - aws lambda update-function-code --function-name index-photos --zip-file fileb://index-photos.zip
       - aws lambda update-function-code --function-name search-photos --zip-file fileb://search-photos.zip
       
